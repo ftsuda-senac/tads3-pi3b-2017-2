@@ -68,8 +68,40 @@ public class ProdutoDAO extends ConexaoBD {
     return lista;
   }
 
-  // http://stackoverflow.com/questions/17459094/getting-id-after-insert-within-a-transaction-oracle
-  // http://www.mkyong.com/jdbc/jdbc-transaction-example/
+  public Produto obter(long id) {
+    String query = "SELECT id, nome, descricao, "
+	    + "vl_compra, vl_venda, categoria, "
+	    + "dt_cadastro FROM produto "
+	    + "WHERE id = ?";
+
+    Produto prod = null;
+    try (Connection conn = obterConexao();
+	    PreparedStatement stmt = conn.prepareStatement(query)) {
+
+      stmt.setLong(1, id);
+      try (ResultSet resultados = stmt.executeQuery()) {
+
+	if (resultados.next()) {
+	  prod = new Produto();
+	  prod.setId(resultados.getLong("id"));
+	  prod.setNome(resultados.getString("nome"));
+	  prod.setDescricao(resultados.getString("descricao"));
+	  prod.setValorCompra(resultados.getBigDecimal("vl_compra"));
+	  prod.setValorVenda(resultados.getBigDecimal("vl_venda"));
+	  prod.setDescricao(resultados.getString("categoria"));
+	  prod.setDtCadastro(resultados.getTimestamp("dt_cadastro"));
+	}
+      }
+    } catch (SQLException ex) {
+      System.err.println(ex.getMessage());
+    } catch (ClassNotFoundException ex) {
+      System.err.println(ex.getMessage());
+    }
+    return prod;
+  }
+
+// http://stackoverflow.com/questions/17459094/getting-id-after-insert-within-a-transaction-oracle
+// http://www.mkyong.com/jdbc/jdbc-transaction-example/
   public void incluirComTransacao(Produto p) {
 
     String query = "INSERT INTO produto "
@@ -107,7 +139,7 @@ public class ProdutoDAO extends ConexaoBD {
 	conn.rollback();
 	System.err.println(ex.getMessage());
       }
-      
+
     } catch (SQLException ex) {
       System.err.println(ex.getMessage());
     } catch (ClassNotFoundException ex) {
