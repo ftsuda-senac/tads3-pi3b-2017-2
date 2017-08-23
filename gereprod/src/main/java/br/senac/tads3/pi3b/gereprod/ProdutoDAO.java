@@ -79,8 +79,8 @@ public class ProdutoDAO extends ConexaoBD {
 
     try (Connection conn = obterConexao()) {
       conn.setAutoCommit(false); // Permite usar transacoes para multiplos comandos no banco de dados
-      try (PreparedStatement stmt = 
-	      conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+      try (PreparedStatement stmt
+	      = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 	stmt.setString(1, p.getNome());
 	stmt.setString(2, p.getDescricao());
 	stmt.setBigDecimal(3, p.getValorCompra());
@@ -100,13 +100,14 @@ public class ProdutoDAO extends ConexaoBD {
 
 	    // Executar próximos INSERTs USANDO O ID novo.
 	  }
-	  conn.commit();
-	  
-	  
-	  // Se ocorrer erro, executar conn.rollback();
-	}
-      }
 
+	}
+	conn.commit();
+      } catch (SQLException ex) {
+	conn.rollback();
+	System.err.println(ex.getMessage());
+      }
+      
     } catch (SQLException ex) {
       System.err.println(ex.getMessage());
     } catch (ClassNotFoundException ex) {
