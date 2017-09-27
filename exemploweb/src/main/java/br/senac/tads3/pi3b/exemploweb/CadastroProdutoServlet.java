@@ -36,7 +36,25 @@ public class CadastroProdutoServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	  throws ServletException, IOException {
-    RequestDispatcher dispatcher = request.getRequestDispatcher("formulario.jsp");
+
+    String destino;
+
+    HttpSession sessao = request.getSession();
+    if (sessao.getAttribute("prod") != null) {
+      request.setAttribute("prod", sessao.getAttribute("prod"));
+      // Remove o atributo da sessao para usuario nao ficar preso na tela de resultados
+      sessao.removeAttribute("prod");
+
+      request.setAttribute("disponivel", sessao.getAttribute("disponivel"));
+      // Remove o atributo da sessao para usuario nao ficar preso na tela de resultados
+      sessao.removeAttribute("disponivel");
+
+      destino = "resultado.jsp";
+    } else {
+      destino = "formulario.jsp";
+    }
+
+    RequestDispatcher dispatcher = request.getRequestDispatcher(destino);
     dispatcher.forward(request, response);
   }
 
@@ -60,7 +78,7 @@ public class CadastroProdutoServlet extends HttpServlet {
 
     BigDecimal vlCompraDecimal = new BigDecimal(vlCompra);
     BigDecimal vlVendaDecimal = new BigDecimal(vlVenda);
-    
+
     Produto p = new Produto();
     p.setNome(nome);
     p.setDescricao(desc);
@@ -68,11 +86,12 @@ public class CadastroProdutoServlet extends HttpServlet {
     p.setValorVenda(vlVendaDecimal);
     p.setCategorias(Arrays.toString(categorias));
     p.setDtCadastro(new Date());
-    
-    request.setAttribute("prod", p);
-    request.setAttribute("disponivel", disponivel);
-    RequestDispatcher dispatcher = request.getRequestDispatcher("resultado.jsp");
-    dispatcher.forward(request, response);
+
+    HttpSession sessao = request.getSession();
+    sessao.setAttribute("prod", p);
+    sessao.setAttribute("disponivel", disponivel);
+
+    response.sendRedirect(request.getContextPath() + "/cadastro-produto");
   }
 
 }
