@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,10 +9,10 @@
   <body>
     <h1>Formulário produto</h1>
     <div>
-      <form action="#" method="post">
+      <form action="${pageContext.request.contextPath}/cadastro-produto" method="post">
 	<div>
-	  <label>Nome</label>
-	  <input type="text" name="nome" />
+	  <label for="txtnome">Nome</label>
+	  <input type="text" name="nome" id="txtnome"/>
 	</div>
 	<div>
 	  <label>Descrição</label>
@@ -39,9 +40,9 @@
 	<div>
 	  <label>Disponível para venda</label>
 	  <label><input type="radio" name="disponivel" 
-			value="sim" /> Sim</label>
+			value="s" /> Sim</label>
 	  <label><input type="radio" name="disponivel" 
-			value="nao" /> Não</label>
+			value="n" /> Não</label>
 	</div>
 	<div>
 	  <button type="submit">Salvar</button>
