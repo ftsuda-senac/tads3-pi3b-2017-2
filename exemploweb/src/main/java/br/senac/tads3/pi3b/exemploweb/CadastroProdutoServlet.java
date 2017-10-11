@@ -6,7 +6,6 @@
 package br.senac.tads3.pi3b.exemploweb;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
