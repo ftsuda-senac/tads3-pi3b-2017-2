@@ -37,12 +37,16 @@ public class LoginServlet extends HttpServlet {
     String username = request.getParameter("username");
     String senha = request.getParameter("senha");
     HttpSession sessao = request.getSession();
+    sessao.setAttribute("username", username);
 
     if ("fodao".equals(username) && "1234".equals(senha)) {
       sessao.setAttribute("nome", "Usuário Fodão");
       response.sendRedirect(request.getContextPath() + "/protegido/resultado");
     } else if ("fodinha".equals(username) && "1234".equals(senha)) {
       sessao.setAttribute("nome", "Usuário Fodinha");
+      response.sendRedirect(request.getContextPath() + "/protegido/resultado");
+    } else if ("normal".equals(username) && "1234".equals(senha)) {
+      sessao.setAttribute("nome", "Usuário Normal");
       response.sendRedirect(request.getContextPath() + "/protegido/resultado");
     } else { // Usuario inválido
       request.setAttribute("mensagemErro", "Usuário ou senha inválido");

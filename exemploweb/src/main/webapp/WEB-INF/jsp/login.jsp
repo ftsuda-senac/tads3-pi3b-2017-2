@@ -5,10 +5,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>JSP Page</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css" />
   </head>
   <body>
     <h1>Login</h1>
-    <c:if test="${mensagemErro}">
+    <c:if test="${not empty mensagemErro}">
       <p><c:out value="${mensagemErro}" /></p>
     </c:if>
     <div>

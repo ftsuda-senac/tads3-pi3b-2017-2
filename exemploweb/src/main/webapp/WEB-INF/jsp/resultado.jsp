@@ -5,17 +5,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>JSP Page</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css" />
   </head>
   <body>
-    <header style="background-color: #ccc">
-      <h1>Exemplo Web - página protegida</h1>
-      <h2><c:out value="${sessionScope.nome}" /></h2>
-    </header>
+    <c:import url="/WEB-INF/jsp/cabecalho.jsp" />
     <div>
       <h1>Conteúdo da página</h1>
+      <ul>
+	<li>Opção 1</li>
+	<li>Opção 2</li>
+	<li>Opção 3</li>
+	<c:if test="${sessionScope.username eq 'fodao'}">
+	<li>
+	  <a href="${pageContext.request.contextPath}/cadastro-produto">Cadastro produto</a>
+	</li>
+	  <li>Opção 5</li>
+	  <li>Opção 6</li>
+	</c:if>
+	<c:if test="${sessionScope.username eq 'fodinha'}">
+	  <li>Opção 7</li>
+	</c:if>
+      </ul>
+      
     </div>
-    <footer>
-      <p>&copy; Senac 2017</p>
-    </footer>
+     <c:import url="/WEB-INF/jsp/rodape.jsp" />
  </body>
 </html>
