@@ -5,6 +5,9 @@
  */
 package br.senac.tads3.pi3b.exemploweb;
 
+import br.senac.tads3.pi3b.exemploweb.autenticacao.UsuarioSistemaService;
+import br.senac.tads3.pi3b.exemploweb.autenticacao.UsuarioSistemaServiceMock;
+import br.senac.tads3.pi3b.exemploweb.entidade.UsuarioSistema;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -36,6 +39,21 @@ public class LoginServlet extends HttpServlet {
 	  throws ServletException, IOException {
     String username = request.getParameter("username");
     String senha = request.getParameter("senha");
+
+    UsuarioSistemaService service = new UsuarioSistemaServiceMock();
+    UsuarioSistema usuario = service.autenticar(username, senha);
+    if (usuario != null) {
+      HttpSession sessao = request.getSession();
+      sessao.setAttribute("usuario", usuario);
+      response.sendRedirect(request.getContextPath() + "/protegido/resultado");
+    } else {
+      request.setAttribute("mensagemErro", "Usuário ou senha inválido");
+      RequestDispatcher dispatcher
+	      = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+      dispatcher.forward(request, response);
+    }
+    /*
+    
     HttpSession sessao = request.getSession();
     sessao.setAttribute("username", username);
 
@@ -54,7 +72,7 @@ public class LoginServlet extends HttpServlet {
 	      = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
       dispatcher.forward(request, response);
     }
-
+     */
   }
 
 }
