@@ -3,4 +3,6 @@
 <header style="background-color: #0f0">
   <h1>Exemplo Web - página protegida</h1>
   <h2><c:out value="${sessionScope.usuario.nomeCompleto}" /></h2>
+  <h3><c:out value="${sessionScope.usuario.hashSenha}" /></h3>
+  <a href="${pageContext.request.contextPath}/logout">Logout</a>
 </header>

@@ -5,6 +5,9 @@
  */
 package br.senac.tads3.pi3b.exemploweb;
 
+import br.senac.tads3.pi3b.exemploweb.autenticacao.UsuarioSistemaService;
+import br.senac.tads3.pi3b.exemploweb.autenticacao.UsuarioSistemaServiceMock;
+import br.senac.tads3.pi3b.exemploweb.entidade.UsuarioSistema;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -41,7 +44,19 @@ public class AutorizacaoFilter implements Filter {
     HttpSession sessao = httpRequest.getSession();
     if (sessao != null && sessao.getAttribute("usuario") != null) {
       // Usuario esta logado
-      chain.doFilter(request, response); // Comando que deixa requisição passar para proximo elemento.
+      
+      UsuarioSistema usuario = (UsuarioSistema) sessao.getAttribute("usuario");
+      UsuarioSistemaService service = new UsuarioSistemaServiceMock();
+      
+      String paginaAcessada = httpRequest.getRequestURI();
+      String funcionalidade = 
+	      paginaAcessada.replace(httpRequest.getContextPath(), "");
+      
+      if (service.autorizado(usuario, funcionalidade)) {
+	chain.doFilter(request, response); // Comando que deixa requisição passar para proximo elemento.
+      } else {
+	httpResponse.sendRedirect(httpRequest.getContextPath() + "/erro-nao-autorizado.jsp");
+      }
     } else {
       httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
       return;

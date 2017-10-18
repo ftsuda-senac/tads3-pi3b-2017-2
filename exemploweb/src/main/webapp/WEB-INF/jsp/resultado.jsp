@@ -15,14 +15,14 @@
 	<li>Opção 1</li>
 	<li>Opção 2</li>
 	<li>Opção 3</li>
-	<c:if test="${sessionScope.usuario.username eq 'fodao'}">
+	<c:if test="${sessionScope.usuario.temPapel('CHEFE')}">
 	<li>
 	  <a href="${pageContext.request.contextPath}/cadastro-produto">Cadastro produto</a>
 	</li>
 	  <li>Opção 5</li>
 	  <li>Opção 6</li>
 	</c:if>
-	<c:if test="${sessionScope.usuario.username eq 'fodinha'}">
+	<c:if test="${sessionScope.usuario.temPapel('MESTRE')}">
 	  <li>Opção 7</li>
 	</c:if>
       </ul>

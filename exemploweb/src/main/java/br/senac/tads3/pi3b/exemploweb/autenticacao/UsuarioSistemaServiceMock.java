@@ -32,16 +32,21 @@ public class UsuarioSistemaServiceMock implements UsuarioSistemaService {
   @Override
   public UsuarioSistema autenticar(String username, String senha) {
     UsuarioSistema usuario = USUARIOS_MOCK.get(username);
-    if (usuario != null) {
-      if (usuario.getHashSenha().equals(senha)) { // Comparacao de String - nao usar "=="
-	return usuario;
-      }
+    if (usuario != null && usuario.verificarSenha(senha)) { // Comparacao de String - nao usar "=="
+      return usuario;
     }
     return null;
   }
 
   @Override
   public boolean autorizado(UsuarioSistema usuario, String funcionalidade) {
+    if (funcionalidade != null) {
+      if (funcionalidade.contains("cadastro-produto") && usuario.temPapel("CHEFE")) {
+	return true;
+      } else if (funcionalidade.contains("protegido/") && usuario.temPapel("PEAO")) {
+	return true;
+      }
+    }
     return false;
   }
 

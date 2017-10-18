@@ -5,13 +5,16 @@
  */
 package br.senac.tads3.pi3b.exemploweb.entidade;
 
+import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author fernando.tsuda
  */
-public class UsuarioSistema {
+public final class UsuarioSistema {
   
   private String nomeCompleto;
   
@@ -25,10 +28,11 @@ public class UsuarioSistema {
     
   }
 
-  public UsuarioSistema(String nomeCompleto, String username, String hashSenha, List<String> papeis) {
+  public UsuarioSistema(String nomeCompleto, String username, 
+	  String senha, List<String> papeis) {
     this.nomeCompleto = nomeCompleto;
     this.username = username;
-    this.hashSenha = hashSenha;
+    setSenha(senha);
     this.papeis = papeis;
   }
 
@@ -56,6 +60,10 @@ public class UsuarioSistema {
   public void setHashSenha(String hashSenha) {
     this.hashSenha = hashSenha;
   }
+  
+  public void setSenha(String senha) {
+    this.hashSenha = BCrypt.hashpw(senha, BCrypt.gensalt());
+  }
 
   public List<String> getPapeis() {
     return papeis;
@@ -63,6 +71,14 @@ public class UsuarioSistema {
 
   public void setPapeis(List<String> papeis) {
     this.papeis = papeis;
+  }
+  
+  public boolean verificarSenha(String senha) {
+    return BCrypt.checkpw(senha, hashSenha);
+  }
+  
+  public boolean temPapel(String papel) {
+    return papeis.contains(papel);
   }
   
 }
